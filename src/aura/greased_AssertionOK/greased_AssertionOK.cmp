@@ -1,0 +1,4 @@
+<aura:component description="An assertion based on a boolean value"
+                extends="c:greased_AssertionCommon">
+
+</aura:component>
