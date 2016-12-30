@@ -1,0 +1,6 @@
+<aura:component description="LoginForm">
+
+    <ui:inputText label="User Name" updateOn="keyUp"/>
+    <lightning:input type="password" name="pw" label="Password"/>
+
+</aura:component>
