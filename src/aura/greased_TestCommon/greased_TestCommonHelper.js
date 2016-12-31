@@ -23,6 +23,7 @@
         }
     },
     addAssertion: function (component, type, params) {
+        var helper = this;
         $A.createComponent(
             type, params,
             function (newComponent, status, errorMessage) {
@@ -34,6 +35,7 @@
                         assertions.push(newComponent);
                     }
                     component.set("v.assertions", assertions);
+                    helper.filterAssertions(component);
                     if (!component.get("v.failed") && !newComponent.get("v.result")) {
                         component.set("v.failed", true);
                     }
@@ -48,6 +50,18 @@
                 }
             }
         )
-    }
+    },
+    filterAssertions: function (component) {
+        var showSuccess = component.get("v.showSuccesses");
+        var all = component.get("v.assertions");
+        var visible = [];
+        for (var i=0; i<all.length; i++) {
 
+            console.log(all[i].get("v.description")+ " ->" + all[i].get("v.result"))
+            if (showSuccess || (!showSuccess && !all[i].get("v.result"))) {
+                visible.push(all[i]);
+            }
+        }
+        component.set("v.visibleAssertions", visible);
+    }
 })

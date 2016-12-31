@@ -1,0 +1,11 @@
+.THIS {
+    margin: 20px;
+}
+
+.THIS .success {
+    margin: 0 10px 0 0;
+}
+
+.THIS .success svg {
+    fill: white ;
+}

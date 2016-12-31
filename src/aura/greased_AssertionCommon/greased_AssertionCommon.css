@@ -1,11 +1,3 @@
 .THIS {
     margin: 3px;
 }
-
-.THIS .pass {
-    background-color: lightgreen;
-}
-
-.THIS .fail {
-    background-color: pink;
-}

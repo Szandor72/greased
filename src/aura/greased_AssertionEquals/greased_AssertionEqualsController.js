@@ -11,5 +11,6 @@
         component.set("v.lhs", JSON.stringify(expected, helper.replacer, space));
         component.set("v.rhs", JSON.stringify(actual, helper.replacer, space));
         component.set("v.diff",JSON.stringify(differences, helper.replacer, space));
+        component.set("v.result", differences.length == 0);
     }
 })

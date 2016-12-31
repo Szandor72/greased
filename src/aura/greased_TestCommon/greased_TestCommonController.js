@@ -15,5 +15,8 @@
     assertNotEquals: function (component, event, helper) {
         var params = event.getParam('arguments');
         helper.addAssertionNotEquals(component, params.expected, params.actual, params.description);
+    },
+    filter: function (component, event, helper) {
+        helper.filterAssertions(component);
     }
 })
