@@ -30,6 +30,8 @@
         </lightning:layoutItem>
     </lightning:layout>
 
+    <hr/>
+
         {!v.body}
 
     <div>

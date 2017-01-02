@@ -34,15 +34,24 @@
                     });
                 }
             },
-            promise: function (handler) {
+            wait: function (handler) {
                 return new function (v) {
-                    return new Promise(handler);
+                    return new Promise(function(resolve, reject) {
+                        try {
+                            handler(v);
+                            resolve(v);
+                        } catch (e) {
+                            reject(e);
+                        }
+                    });
                 }
             },
             pass: function (context) {
+                console.log("PASSED: "+JSON.stringify(context));
                 component.set("v.status", "PASS");
             },
             fail: function (error) {
+                console.log(error);
                 component.set("v.status", "FAIL");
             }
         };
