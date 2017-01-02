@@ -47,6 +47,20 @@
                         });
                     });
             },
+            whenDone: function (handler) {
+                return $A.getCallback( // allows changes to lightning attributes https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_promises.htm
+                    function (v) {
+                        return new Promise(function (resolve, reject) {
+                            try {
+                                handler(v, function () {
+                                    resolve(v);
+                                });
+                            } catch (e) {
+                                reject(e);
+                            }
+                        });
+                    });
+            },
             pass: function (context) {
                 console.log("PASSED: " + JSON.stringify(context));
                 component.set("v.status", "PASS");

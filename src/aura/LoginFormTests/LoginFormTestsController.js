@@ -56,7 +56,11 @@
 
             .then(test.wait(function (context) {
                 loginRejected.set("v.password", "labrynth");
-                loginRejected.login(); // TODO need to block till login callback returns
+            }))
+            // whenDone blocks the chain until the done fn is called
+            .then(test.whenDone(function (context, done) {
+                console.log(context);
+                loginRejected.login(done);
             }))
             .then(test.assertEquals("Invalid Username or Password", "v.message",
                 "Apex service message is displayed to the user"))
