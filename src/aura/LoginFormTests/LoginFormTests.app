@@ -2,6 +2,12 @@
 
     <aura:handler event="c:greased_StartTestingEvent" action="{!c.handleStartTests}"/>
 
-    <c:LoginForm />
+    <c:LoginForm aura:id="empty"/>
+
+    <c:LoginForm aura:id="disabled"/>
+
+    <c:LoginForm aura:id="enabled"/>
+
+    <c:LoginForm aura:id="rejected"/>
 
 </aura:application>
