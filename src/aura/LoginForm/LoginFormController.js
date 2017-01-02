@@ -1,8 +1,8 @@
 ({
     doInit: function (component, event, helper) {
         helper.sendToService(component, "c.load", {}, function (loadResult) {
-            console.log("loading username: "+loadResult.username);
             component.set("v.username", loadResult.username);
+            component.set("v.loaded", true);
         });
     },
     adjust: function (component, event, helper) {
