@@ -5,9 +5,11 @@
 
     <ltng:require scripts="{!$Resource.greased_diff}" afterScriptsLoaded="{!c.jsReady}"/>
 
-    <aura:attribute name="assertions" type="Aura.Component[]" access="private"
+    <aura:attribute name="status" type="String" access="public" default="LOADING"
+                    description="The status of the test"/>
+    <aura:attribute name="assertions" type="Aura.Component[]" access="public"
                     description="All the assertion child components"/>
-    <aura:attribute name="visibleAssertions" type="Aura.Component[]" access="private"
+    <aura:attribute name="visibleAssertions" type="Aura.Component[]" access="public"
                     description="Assertion child components currently displayed"/>
 
     <aura:attribute name="showSuccesses" type="Boolean" default="false"
@@ -18,24 +20,6 @@
     <aura:registerEvent name="startEvent" type="c:greased_StartTestingEvent"/>
 
     <aura:handler name="change" value="{!v.showSuccesses}" action="{!c.filter}"/>
-
-    <aura:method name="assert" description="Check a boolean result"
-                 action="{!c.assertOK}" access="public">
-        <aura:attribute name="result" type="Boolean"/>
-        <aura:attribute name="description" type="String"/>
-    </aura:method>
-    <aura:method name="assertEquals" description="Check that two values are equal"
-                 action="{!c.assertEquals}" access="public">
-        <aura:attribute name="expected" type="Object"/>
-        <aura:attribute name="actual" type="Object"/>
-        <aura:attribute name="description" type="String"/>
-    </aura:method>
-    <aura:method name="assertNotEquals" description="Check that two values are not equal"
-                 action="{!c.assertNotEquals}" access="public">
-        <aura:attribute name="expected" type="Object"/>
-        <aura:attribute name="actual" type="Object"/>
-        <aura:attribute name="description" type="String"/>
-    </aura:method>
 
     <lightning:layout horizontalAlign="space">
         <lightning:layoutItem flexibility="auto" padding="around-small">
@@ -49,16 +33,15 @@
         {!v.body}
 
     <div>
-        <aura:if isTrue="{!and(not(v.showSuccesses), v.assertions.length > 0)}">
-            <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
-                <span class="slds-assistive-text">Success</span>
-                <h2>
-                    <lightning:icon iconName="utility:check" size="small" class="success"/>
-                        {!v.assertions.length-1} Assertion(s) Succeeded
-                </h2>
-            </div>
-            <br/>
-        </aura:if>
+        <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+            <span class="slds-assistive-text">Success</span>
+            <h2>
+                {!v.status}
+                <lightning:icon iconName="utility:check" size="small" class="success"/>
+                    {!v.assertions.length} Assertion(s) Completed
+            </h2>
+        </div>
+        <br/>
 
             {!v.visibleAssertions}
     </div>

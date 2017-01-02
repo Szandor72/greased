@@ -1,8 +1,16 @@
-validation component
+# Design
 
-type specific editors
-- including a generic wrapper component that checks field type so that only fieldName is required
-- editors send type required to server which drives translation so different editors can r/w single db types
-- client sends all editors field requirements to server at load time and server dynamically/securley provides them (with explicit nulls)
+## Why asynchronous
 
-generic apex handler
+* Dynamically adding components to the DOM is asynchronous
+* Code being tested might call Apex, which is asynchronous
+
+## Promises vs Callbacks
+
+Promises only available in SFDC "Supported" browsers. In Communities, you have to assume users
+will use un-supported browsers. For this reason, tests can be written using callbacks instead of 
+Promises by passing callbacks to each assertion.
+
+This means Promises cannot be used in client code. They could still be used in test code since you
+control the browsers used to invoke tests but that means the tests cannot be used to check your code 
+in all browsers that users might use.
