@@ -1,53 +1,54 @@
 ({
     driver: function (component, event, helper) {
         return {
-            start: function (context) {
+            start: function (context) { // this will return a promise i.e. cause the chain to wait
                 return new Promise(function (resolve, reject) {
                     setTimeout(function () {
-                        $A.log("starting tests");
+                        $A.log("Starting test chain..");
                         component.set("v.status", "RUNNING");
                         resolve(context);
-                    }, 3000);
+                    }, 1000);
                 });
             },
-            assert: function (result, description) {
+            assert: function (expr, description) {
                 return helper.addAssertion(component, "c:greased_AssertionOK", {
-                    result: result,
+                    expr: expr,
                     description: description
                 });
             },
-            assertEquals: function (expected, actual, description) {
+            assertEquals: function (expected, expr, description) {
                 if (!component.get("v.failed")) {
                     return helper.addAssertion(component, "c:greased_AssertionEquals", {
+                        expr: expr,
                         expected: expected,
-                        actual: actual,
                         description: description
                     });
                 }
             },
-            assertNotEquals: function (expected, actual, description) {
+            assertNotEquals: function (expected, expr, description) {
                 if (!component.get("v.failed")) {
                     return helper.addAssertion(component, "c:greased_AssertionNotEquals", {
+                        expr: expr,
                         expected: expected,
-                        actual: actual,
                         description: description
                     });
                 }
             },
             wait: function (handler) {
-                return new function (v) {
-                    return new Promise(function(resolve, reject) {
-                        try {
-                            handler(v);
-                            resolve(v);
-                        } catch (e) {
-                            reject(e);
-                        }
+                return $A.getCallback( // allows changes to lightning attributes https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_promises.htm
+                    function (v) {
+                        return new Promise(function (resolve, reject) {
+                            try {
+                                handler(v);
+                                resolve(v);
+                            } catch (e) {
+                                reject(e);
+                            }
+                        });
                     });
-                }
             },
             pass: function (context) {
-                console.log("PASSED: "+JSON.stringify(context));
+                console.log("PASSED: " + JSON.stringify(context));
                 component.set("v.status", "PASS");
             },
             fail: function (error) {
@@ -58,10 +59,14 @@
     },
     addAssertion: function (component, type, params) {
         var helper = this;
-        return $A.getCallback( // allows changes to lightning attributes https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_promises.htm
-            function (value) { // when invoked using .then, this will wait for the previous promise to resolve
+        return $A.getCallback( // see above comment in "wait"
+            function (context) { // when invoked using .then, this will wait for the previous promise to resolve
                 return new Promise(function (resolve, reject) {
-                    $A.log('asserting: ' + params.description);
+                    // TODO current change
+                    params.value = context.current.get(params.expr);
+                    $A.log('asserting: ' + params.description + " " + params.expr + " " + params.result);
+                    $A.log('context: ' + JSON.stringify(context));
+                    $A.log('params: ' + JSON.stringify(params));
                     $A.createComponent(type, params,
                         function (newComponent, status, errorMessage) {
                             if (status === "SUCCESS") {
@@ -87,7 +92,7 @@
 
                                 // promise handling
                                 if (assertionPassed) {
-                                    resolve(value);
+                                    resolve(context);
                                 } else {
                                     $A.log("rejecting: " + params.description);
                                     reject(Error("Assertion failed: " + params.description));
