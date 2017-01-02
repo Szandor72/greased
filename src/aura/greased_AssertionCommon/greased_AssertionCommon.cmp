@@ -1,6 +1,8 @@
 <aura:component description="The common UI and functions for all assertion components"
                 abstract="true">
 
+    <aura:attribute name="value" type="Object" access="public"
+                    description="the attribute value being checked"/>
     <aura:attribute name="result" type="Boolean" access="public"
                     description="true when the assertion is successful"/>
     <aura:attribute name="description" type="String" access="public"
