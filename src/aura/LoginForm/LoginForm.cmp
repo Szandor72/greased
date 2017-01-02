@@ -12,7 +12,9 @@
     <aura:handler name="change" value="{!v.password}" action="{!c.adjust}"/>
 
     <aura:method name="login" action="{!c.doLogin}" access="public"
-                 description="public fn allows tests to invoke login. could be event driven instead!"/>
+                 description="public fn allows tests to invoke login. could be event driven instead!">
+        <aura:attribute name="callback" type="Object"/>
+    </aura:method>
 
     <article class="slds-card">
         <div class="slds-card__body">

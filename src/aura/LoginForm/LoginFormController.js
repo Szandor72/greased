@@ -18,6 +18,11 @@
         }, function (loginResult) {
             $A.log(loginResult);
             component.set("v.message", loginResult.MSG);
+            // notify caller that login apex has completed
+            var callback = event.getParam("arguments").callback;
+            if (callback) {
+                callback();
+            }
         });
     }
 })
