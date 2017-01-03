@@ -4,14 +4,14 @@ A collection of Lightning components useful for developers and admins
 ## Install
 
 <p>Production
-<a href="https://githubsfdeploy.herokuapp.com?owner=stevebuik&repo=greased">
+<a href="https://githubsfdeploy.herokuapp.com/stevebuik/greased">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
 </p>
 
 <p>Sandbox
-<a href="https://githubsfdeploy-sandbox.herokuapp.com?owner=stevebuik&repo=greased">
+<a href="https://githubsfdeploy-sandbox.herokuapp.com/stevebuik/greased">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
