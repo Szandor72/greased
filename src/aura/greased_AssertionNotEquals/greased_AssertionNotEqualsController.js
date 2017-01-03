@@ -10,8 +10,14 @@
 
         var space = 3;
         component.set("v.lhs", JSON.stringify(expected, null, space));
+        component.set("v.rhs", JSON.stringify(actual, null, space));
 
-        component.set("v.result", !$A.util.isUndefined(differences) && differences.length > 0);
+        var passed = !$A.util.isUndefined(differences) && differences.length > 0;
+        component.set("v.result", passed);
+
+        if (passed) {
+            component.set("v.problem", "Attribute value was the same");
+        }
     }
 
 })

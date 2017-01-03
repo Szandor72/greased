@@ -1,3 +1,8 @@
 .THIS {
+    background-color: white;
     margin: 3px;
+}
+
+.THIS .bottom {
+    height: 10px;
 }
