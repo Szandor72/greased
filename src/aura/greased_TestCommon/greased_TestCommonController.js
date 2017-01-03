@@ -9,7 +9,7 @@
         component.set("v.javascriptLoaded", true);
         helper.handleLoadRace(component, event, helper);
     },
-    filter: function (component, event, helper) {
-        helper.filterAssertions(component);
+    handleToggle: function (component, event, helper) {
+        helper.handleToggle(component);
     }
 })

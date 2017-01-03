@@ -8,6 +8,8 @@
     <aura:attribute name="cssTheme" type="String" default="" access="public"/>
     <aura:attribute name="icon" type="String" default="" access="public"/>
 
+    <aura:registerEvent name="toggleDisplay" type="c:greased_ToggleDisplayEvent"/>
+
     <aura:handler name="change" value="{!v.status}" action="{!c.deriveStyles}"/>
 
     <div class="{!'slds-notify slds-notify--alert '+ v.cssTheme +' slds-theme--alert-texture'}" role="alert">
@@ -35,7 +37,7 @@
             <lightning:layoutItem flexibility="auto" size="4">
                 <section class="slds-clearfix">
                     <div class="slds-float--right">
-                        <lightning:button label="Show Assertions" onclick="{!c.toggleAssertions}"/>
+                        <lightning:button label="Show/Hide Assertions" onclick="{!c.toggleAssertions}"/>
                     </div>
                 </section>
             </lightning:layoutItem>

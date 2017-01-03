@@ -14,5 +14,9 @@
         }
         var icon = icons[component.get("v.status")];
         component.set("v.icon", $A.util.isEmpty(icon) ? "" : icon);
+    },
+    toggleAssertions: function(component, event, helper) {
+        var toggle = component.getEvent("toggleDisplay");
+        toggle.fire();
     }
 })

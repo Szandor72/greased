@@ -27,11 +27,7 @@
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
-    <lightning:layout horizontalAlign="space">
-        <lightning:layoutItem flexibility="auto" padding="around-small">
-            <ui:inputCheckbox label="Show successful Assertions" value="{!v.showAssertions}"/>
-        </lightning:layoutItem>
-    </lightning:layout>
+    <aura:handler name="toggleDisplay" event="c:greased_ToggleDisplayEvent" action="{!c.handleToggle}"/>
 
     <c:greased_TestStatus status="{!v.status}" count="{!v.count}"/>
 
@@ -42,6 +38,6 @@
     <aura:if isTrue="{!v.showAssertions}">
             {!v.assertionGroups}
     </aura:if>
-    {!v.failure}
+        {!v.failure}
 
 </aura:application>

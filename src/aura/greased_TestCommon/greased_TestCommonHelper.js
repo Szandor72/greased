@@ -170,6 +170,10 @@
             }
         )
     },
+    handleToggle: function(component) {
+        var show = component.get("v.showAssertions");
+        component.set("v.showAssertions", !show);
+    },
     sendToService: function (component, method, params, callback) {
         var action = component.get(method);
         if (params) {
