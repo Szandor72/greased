@@ -1,6 +1,10 @@
 # greased
 A collection of Lightning components useful for developers and admins
 
+## Install
+
+https://githubsfdeploy.herokuapp.com/?owner=stevebuik&repo=greased
+
 ## TODO
 
 * better diff display for assertEquals component
