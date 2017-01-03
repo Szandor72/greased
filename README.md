@@ -1,7 +1,19 @@
-# greased
+# Greased Development
 End to End testing for Lightning Components
 
 ![Demo](demo.gif "Demo")
+
+Eventually Salesforce will provide a test framework for Lightning. Until then, use Greased.
+
+It's basically a Selenium test written in Lightning flavoured javascript. 
+By testing this way, you can use the test during development to decrease your time to feedback.
+
+## Benefits
+
+Testing components using this technique provides two benefits:
+
+* Normal testing, assertions and regression protection
+* Faster development feedback by viewing N copies of your component in different states at the same time
 
 ## Install
 
