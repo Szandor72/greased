@@ -6,7 +6,11 @@
         var startFn = component.get("v.startFn");
         if (jsLoaded && apexLoaded) {
             $A.log("race complete");
-            startFn();
+            if (startFn) {
+                startFn();
+            } else {
+                alert("test.start has not been invoked. Add an init handler to this app.");
+            }
         }
     },
     driver: function (component, event, helper) {

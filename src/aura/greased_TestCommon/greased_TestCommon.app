@@ -25,7 +25,7 @@
     <aura:attribute name="startFn" type="Object" access="public"
                     description="The fn that will be invoked when the tests can begin"/>
 
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doCommonInit}"/>
 
     <aura:handler name="toggleDisplay" event="c:greased_ToggleDisplayEvent" action="{!c.handleToggle}"/>
 
@@ -35,9 +35,12 @@
 
         {!v.body}
 
+    <hr/>
+
     <aura:if isTrue="{!v.showAssertions}">
             {!v.assertionGroups}
     </aura:if>
+
         {!v.failure}
 
 </aura:application>

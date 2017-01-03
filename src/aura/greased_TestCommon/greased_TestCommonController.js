@@ -1,5 +1,5 @@
 ({
-    doInit: function (component, event, helper) {
+    doCommonInit: function (component, event, helper) {
         helper.sendToService(component, "c.load", {}, function (loadResult) {
             component.set("v.apexLoaded", true);
             helper.handleLoadRace(component, event, helper);
