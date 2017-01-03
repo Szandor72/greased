@@ -11,23 +11,35 @@
     <aura:handler name="change" value="{!v.status}" action="{!c.deriveStyles}"/>
 
     <div class="{!'slds-notify slds-notify--alert '+ v.cssTheme +' slds-theme--alert-texture'}" role="alert">
-        <span class="slds-assistive-text">Success</span>
-        <h2>
-        {!v.status}
-            <aura:if isTrue="{!empty(v.icon)}">
-                <div class="slds-is-relative">
-                    <div class="slds-spinner--inverse slds-spinner slds-spinner--small running" role="alert">
-                        <span class="slds-assistive-text">Loading</span>
-                        <div class="slds-spinner__dot-a"></div>
-                        <div class="slds-spinner__dot-b"></div>
+
+        <lightning:layout horizontalAlign="space">
+            <lightning:layoutItem flexibility="auto" size="4">
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" size="4">
+            {!v.status}
+                <aura:if isTrue="{!empty(v.icon)}">
+                    <div class="slds-is-relative">
+                        <div class="slds-spinner--inverse slds-spinner slds-spinner--small running"
+                             role="alert">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
                     </div>
-                </div>
-                <aura:set attribute="else">
-                    <lightning:icon iconName="{!v.icon}" size="small" class="success"/>
-                </aura:set>
-            </aura:if>
-                {!v.count} Assertion(s) Completed
-        </h2>
+                    <aura:set attribute="else">
+                        <lightning:icon iconName="{!v.icon}" size="small" class="success"/>
+                    </aura:set>
+                </aura:if>
+                    {!v.count} Assertion(s) Completed
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" size="4">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right">
+                        <lightning:button label="Show Assertions" onclick="{!c.toggleAssertions}"/>
+                    </div>
+                </section>
+            </lightning:layoutItem>
+        </lightning:layout>
     </div>
 
 </aura:component>
