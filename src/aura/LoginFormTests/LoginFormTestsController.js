@@ -10,36 +10,31 @@
         var loginAllowed = component.find("enabled");
         var loginRejected = component.find("rejected");
 
-        test.start({
-            current: empty, // TODO set an array of components and then set a module string to move through them
-            some: "data you want available in all assertions"
+        var startTests = test.start({
+            focused: empty, // you can set the initial focus in test.start or using test.focus (see below)
+            any: "data you want available in all assertions"
         })
 
         // using a single chain for now. TODO fork into parallel chains once delayed attr read is solved
 
         //////////// #1 EMPTY ////////////
 
-            .then(test.assert("v.loaded", "Form is in the loaded state after the Apex callback"))
+        startTests
+            .then(test.assert("v.loaded", "The 1st form will have both fields empty and should be disabled"))
             .then(test.wait(function (context) { // use test.wait to block the chain after this function
                 empty.set("v.username", "");
             }))
-            //.then(test.assertEquals(undefined, "v.username", "Username attribute is empty"))
+            .then(test.assertEquals("", "v.username", "Username attribute is empty"))
             .then(test.assert("v.disabled", "Login not allowed when username and password are empty"))
 
             //////////// #2 DISABLED ////////////
 
-            .then(function (context) {
-                context.current = disabled;
-                return context;
-            })
+            .then(test.focus(disabled, 'The 2nd login form has no changes made so should remain disabled'))
             .then(test.assert("v.disabled", "Login not allowed when password is empty"))
 
             //////////// #3 ENABLED ////////////
 
-            .then(function (context) {
-                context.current = loginAllowed;
-                return context;
-            })
+            .then(test.focus(loginAllowed, 'The 3rd login form will have both fields populated so should allow login attempts'))
             .then(test.wait(function (context) {
                 loginAllowed.set("v.password", "labrynth");
             }))
@@ -49,17 +44,12 @@
 
             ////////// #4 REJECTED ////////////
 
-            .then(function (context) {
-                context.current = loginRejected;
-                return context;
-            })
-
+            .then(test.focus(loginRejected, 'The 4th login form will have both fields populated so should allow login attempts'))
             .then(test.wait(function (context) {
                 loginRejected.set("v.password", "labrynth");
             }))
             // whenDone blocks the chain until the done fn is called
             .then(test.whenDone(function (context, done) {
-                console.log(context);
                 loginRejected.login(done);
             }))
             .then(test.assertEquals("Invalid Username or Password", "v.message",

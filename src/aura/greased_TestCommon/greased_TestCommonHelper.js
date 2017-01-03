@@ -10,6 +10,12 @@
                     }, 1000);
                 });
             },
+            focus: function (focusedComponent, description) {
+                return function (context) {
+                    context.focused = focusedComponent;
+                    return context;
+                }
+            },
             assert: function (expr, description) {
                 return helper.addAssertion(component, "c:greased_AssertionOK", {
                     expr: expr,
@@ -76,8 +82,7 @@
         return $A.getCallback( // see above comment in "wait"
             function (context) { // when invoked using .then, this will wait for the previous promise to resolve
                 return new Promise(function (resolve, reject) {
-                    // TODO current change
-                    params.value = context.current.get(params.expr);
+                    params.value = context.focused.get(params.expr);
                     $A.log('asserting: ' + params.description + " " + params.expr + " " + params.result);
                     $A.log('context: ' + JSON.stringify(context));
                     $A.log('params: ' + JSON.stringify(params));
