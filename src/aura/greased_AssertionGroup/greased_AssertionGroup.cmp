@@ -1,0 +1,14 @@
+<aura:component>
+
+    <aura:attribute name="description" type="String" access="public"/>
+    <aura:attribute name="assertions" type="Aura.Component[]" access="public"
+                    description="All the assertion child components"/>
+
+    <div>
+        <h2>{!v.description}</h2>
+
+            {!v.assertions}
+
+    </div>
+
+</aura:component>

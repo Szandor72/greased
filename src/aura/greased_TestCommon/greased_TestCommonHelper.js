@@ -24,6 +24,7 @@
             },
             focus: function (focusedComponent, description) {
                 return function (context) {
+                    context.description = description;
                     context.focused = focusedComponent;
                     return context;
                 }
@@ -35,22 +36,18 @@
                 });
             },
             assertEquals: function (expected, expr, description) {
-                if (!component.get("v.failed")) {
-                    return helper.addAssertion(component, "c:greased_AssertionEquals", {
-                        expr: expr,
-                        expected: expected,
-                        description: description
-                    });
-                }
+                return helper.addAssertion(component, "c:greased_AssertionEquals", {
+                    expr: expr,
+                    expected: expected,
+                    description: description
+                });
             },
             assertNotEquals: function (expected, expr, description) {
-                if (!component.get("v.failed")) {
-                    return helper.addAssertion(component, "c:greased_AssertionNotEquals", {
-                        expr: expr,
-                        expected: expected,
-                        description: description
-                    });
-                }
+                return helper.addAssertion(component, "c:greased_AssertionNotEquals", {
+                    expr: expr,
+                    expected: expected,
+                    description: description
+                });
             },
             wait: function (handler) {
                 return $A.getCallback(
@@ -102,58 +99,76 @@
                     $A.log('asserting: ' + params.description + " " + params.expr + " " + params.result);
                     $A.log('context: ' + JSON.stringify(context));
                     $A.log('params: ' + JSON.stringify(params));
-                    $A.createComponent(type, params,
-                        function (newComponent, status, errorMessage) {
-                            if (status === "SUCCESS") {
 
-                                // add the new assertion component to the UI
-                                var assertions = component.get("v.assertions");
-                                if ($A.util.isUndefined(assertions)) {
-                                    assertions = [newComponent]
-                                } else {
-                                    assertions.push(newComponent);
-                                }
-                                component.set("v.assertions", assertions);
+                    var currentGroup = context.group;
+                    var isNewGroupRequired = $A.util.isUndefinedOrNull(currentGroup) ||
+                        context.description != context.group.get("v.description");
 
-                                // filter assertions to only show what user wants to see
-                                // TODO move all filtering to an AssertGroup component.
-                                helper.filterAssertions(component);
-
-                                // control continuation of test
-                                var assertionPassed = newComponent.get("v.result");
-                                if (!component.get("v.failed") && !assertionPassed) {
-                                    component.set("v.failed", true);
-                                }
-
-                                // promise handling
-                                if (assertionPassed) {
-                                    resolve(context);
-                                } else {
-                                    $A.log("rejecting: " + params.description);
-                                    reject(Error("Assertion failed: " + params.description));
-                                }
-
-                            } else if (status === "INCOMPLETE") {
-                                reject(Error("No response from server or client is offline."));
+                    if (isNewGroupRequired) {
+                        helper.newAssertionGroup(component, context.description,
+                            function (group) {
+                                var groups = component.get("v.assertionGroups");
+                                groups.push(group);
+                                context.group = group;
+                                component.set("v.assertionGroups", groups);
+                                helper.newAssertion(type, params, function (assertion) {
+                                    var assertionPassed = assertion.get("v.result");
+                                    if (assertionPassed) {
+                                        helper.addAssertionToGroup(group, assertion);
+                                        resolve(context);
+                                    } else {
+                                        component.set("v.failure", assertion);
+                                        reject(Error(context.description + " : " + params.description));
+                                    }
+                                });
+                            });
+                    } else {
+                        helper.newAssertion(type, params, function (assertion) {
+                            var assertionPassed = assertion.get("v.result");
+                            if (assertionPassed) {
+                                helper.addAssertionToGroup(currentGroup, assertion);
+                                resolve(context);
+                            } else {
+                                component.set("v.failure", assertion);
+                                reject(Error(context.description + " : " + params.description));
                             }
-                            else if (status === "ERROR") {
-                                reject(Error(errorMessage));
-                            }
-                        }
-                    );
+                        });
+                    }
+
+                    helper.incrementCount(component);
                 });
             });
     },
-    filterAssertions: function (component) {
-        var showSuccess = component.get("v.showSuccesses");
-        var all = component.get("v.assertions") || [];
-        var visible = [];
-        for (var i = 0; i < all.length; i++) {
-            if (showSuccess || (!showSuccess && !all[i].get("v.result"))) {
-                visible.push(all[i]);
+    incrementCount: function (component) {
+        var c = component.get("v.count");
+        component.set("v.count", c + 1);
+    },
+    addAssertionToGroup: function (group, assertion) {
+        var assertions = group.get("v.assertions") || [];
+        assertions.push(assertion);
+        group.set("v.assertions", assertions);
+    },
+    newAssertionGroup: function (component, description, callback) {
+        $A.createComponent("c:greased_AssertionGroup", {description: description},
+            function (group, status, errorMessage) {
+                if (status === "SUCCESS") {
+                    callback(group);
+                } else {
+                    console.log(errorMessage);
+                }
             }
-        }
-        component.set("v.visibleAssertions", visible);
+        );
+    },
+    newAssertion: function (type, params, callback) {
+        $A.createComponent(type, params,
+            function (newAssertion, status, errorMessage) {
+                if (status === "SUCCESS") {
+                    callback(newAssertion);
+                } else {
+                    console.log(errorMessage);
+                }
+            }
+        )
     },
     sendToService: function (component, method, params, callback) {
         var action = component.get(method);

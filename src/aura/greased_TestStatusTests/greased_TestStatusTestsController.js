@@ -11,7 +11,8 @@
         var failed = component.find("failed");
 
         var startTests = test.start({
-            focused: initial
+            focused: initial,
+            description: "In the initial state"
         })
 
         startTests

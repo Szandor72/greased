@@ -7,15 +7,16 @@
 
     <aura:attribute name="status" type="String" access="public" default="LOADING"
                     description="The status of the test"/>
-    <aura:attribute name="assertions" type="Aura.Component[]" access="public"
-                    description="All the assertion child components"/>
-    <aura:attribute name="visibleAssertions" type="Aura.Component[]" access="public"
-                    description="Assertion child components currently displayed"/>
 
-    <aura:attribute name="showSuccesses" type="Boolean" default="false"
-                    description="When true, shows all assertions, even those that succeeded"/>
-    <aura:attribute name="failed" type="Boolean" default="false"
-                    description="Indicates when an assertion has failed. Stops further assertions from being added"/>
+    <aura:attribute name="count" type="Integer" access="public" default="0"
+                    description="The count of assertions processed"/>
+
+    <aura:attribute name="assertionGroups" type="Aura.Component[]" access="public"
+                    description="All assertions, grouped by focused component description"/>
+    <aura:attribute name="failure" type="Aura.Component" access="public"
+                    description="The failed assertion, always displayed"/>
+    <aura:attribute name="showAssertions" type="Boolean" default="false"
+                    description="When true, shows assertions"/>
 
     <aura:attribute name="javascriptLoaded" type="Boolean" default="false" access="public"
                     description="Set true when all the javascript assets have been loaded"/>
@@ -26,22 +27,21 @@
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
-    <aura:handler name="change" value="{!v.showSuccesses}" action="{!c.filter}"/>
-
     <lightning:layout horizontalAlign="space">
         <lightning:layoutItem flexibility="auto" padding="around-small">
-            <ui:inputCheckbox label="Show successful Assertions" value="{!v.showSuccesses}"/>
+            <ui:inputCheckbox label="Show successful Assertions" value="{!v.showAssertions}"/>
         </lightning:layoutItem>
     </lightning:layout>
 
-    <c:greased_TestStatus status="{!v.status}" count="{!v.assertions.length}"/>
+    <c:greased_TestStatus status="{!v.status}" count="{!v.count}"/>
 
     <hr/>
 
         {!v.body}
 
-    <div>
-            {!v.visibleAssertions}
-    </div>
+    <aura:if isTrue="{!v.showAssertions}">
+            {!v.assertionGroups}
+    </aura:if>
+    {!v.failure}
 
 </aura:application>

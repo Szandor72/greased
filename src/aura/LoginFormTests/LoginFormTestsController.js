@@ -9,9 +9,11 @@
         var loginAllowed = component.find("enabled");
         var loginRejected = component.find("rejected");
 
+        // IMPORTANT: focus descriptions must be unique since they control how assertions are groups
         var startTests = test.start({
             focused: empty, // you can set the initial focus in test.start or using test.focus (see below)
-            any: "data you want available in all assertions"
+            description: "The 1st form will have both fields empty and should be disabled",
+            any: "other data you want available to all assertions"
         })
 
         // using a single chain. TODO fork into parallel chains once delayed attr read is solved
@@ -19,7 +21,7 @@
         //////////// #1 EMPTY ////////////
 
         startTests
-            .then(test.assert("v.loaded", "The 1st form will have both fields empty and should be disabled"))
+            .then(test.assert("v.loaded", "The form should be loaded before tests start"))
             .then(test.wait(function (context) { // use test.wait to block the chain after this function
                 empty.set("v.username", "");
             }))
