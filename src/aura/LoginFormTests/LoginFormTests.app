@@ -1,6 +1,6 @@
 <aura:application extends="c:greased_TestCommon">
 
-    <aura:handler event="c:greased_StartTestingEvent" action="{!c.handleStartTests}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
     <c:LoginForm aura:id="empty"/>
 

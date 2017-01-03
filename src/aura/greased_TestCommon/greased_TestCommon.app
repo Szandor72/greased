@@ -1,7 +1,7 @@
 <aura:application description="Inherited features for Greased test apps"
                   abstract="true"
+                  controller="greased_TestLoader"
                   extends="force:slds">
-
 
     <ltng:require scripts="{!$Resource.greased_diff}" afterScriptsLoaded="{!c.jsReady}"/>
 
@@ -17,7 +17,14 @@
     <aura:attribute name="failed" type="Boolean" default="false"
                     description="Indicates when an assertion has failed. Stops further assertions from being added"/>
 
-    <aura:registerEvent name="startEvent" type="c:greased_StartTestingEvent"/>
+    <aura:attribute name="javascriptLoaded" type="Boolean" default="false" access="public"
+                    description="Set true when all the javascript assets have been loaded"/>
+    <aura:attribute name="apexLoaded" type="Boolean" default="false" access="public"
+                    description="Set true when the initial Apex called have been completed"/>
+    <aura:attribute name="startFn" type="Object" access="public"
+                    description="The fn that will be invoked when the tests can begin"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
     <aura:handler name="change" value="{!v.showSuccesses}" action="{!c.filter}"/>
 
@@ -38,7 +45,7 @@
         <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
             <span class="slds-assistive-text">Success</span>
             <h2>
-                {!v.status}
+            {!v.status}
                 <lightning:icon iconName="utility:check" size="small" class="success"/>
                     {!v.assertions.length} Assertion(s) Completed
             </h2>

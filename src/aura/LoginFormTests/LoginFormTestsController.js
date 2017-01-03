@@ -1,6 +1,5 @@
 ({
-    handleStartTests: function (component, event, helper) {
-        // TODO waiting for the boxcar + delay can be done in super component and resolve the start promise there
+    doInit: function (component, event, helper) {
 
         var test = helper.driver(component, event, helper);
 
@@ -15,7 +14,7 @@
             any: "data you want available in all assertions"
         })
 
-        // using a single chain for now. TODO fork into parallel chains once delayed attr read is solved
+        // using a single chain. TODO fork into parallel chains once delayed attr read is solved
 
         //////////// #1 EMPTY ////////////
 

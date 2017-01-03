@@ -1,8 +1,13 @@
 ({
+    doInit: function (component, event, helper) {
+        helper.sendToService(component, "c.load", {}, function (loadResult) {
+            component.set("v.apexLoaded", true);
+            helper.handleLoadRace(component, event, helper);
+        })
+    },
     jsReady: function (component, event, helper) {
-        var appEvent = $A.get("e.c:greased_StartTestingEvent");
-        appEvent.setParams({driver: component, componentNumber: 0});
-        appEvent.fire();
+        component.set("v.javascriptLoaded", true);
+        helper.handleLoadRace(component, event, helper);
     },
     filter: function (component, event, helper) {
         helper.filterAssertions(component);

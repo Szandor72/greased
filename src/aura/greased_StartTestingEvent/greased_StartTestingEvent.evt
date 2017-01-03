@@ -1,7 +1,0 @@
-<aura:event type="APPLICATION"
-            description="Instructs any component that wants to make test assertions to begin">
-    <aura:attribute name="driver" type="Object" access="public"
-                    description="The component where assertion fns can be called"/>
-    <aura:attribute name="componentNumber" type="Integer" required="false"
-                    description="when empty, this means components should run general tests. will be fired with up to 10 integers for parallel component testing."/>
-</aura:event>

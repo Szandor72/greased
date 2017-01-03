@@ -1,13 +1,25 @@
 ({
+    // starting tests happens when the javascript and apex callback have both completed i.e. a race condition
+    handleLoadRace: function (component, event, helper) {
+        var jsLoaded = component.get("v.javascriptLoaded");
+        var apexLoaded = component.get("v.apexLoaded");
+        var startFn = component.get("v.startFn");
+        if (jsLoaded && apexLoaded) {
+            $A.log("race complete");
+            startFn();
+        }
+    },
     driver: function (component, event, helper) {
         return {
             start: function (context) { // this will return a promise i.e. cause the chain to wait
+                $A.log("start called by test");
                 return new Promise(function (resolve, reject) {
-                    setTimeout(function () {
+                    var startFn = function () {
                         $A.log("Starting test chain..");
                         component.set("v.status", "RUNNING");
                         resolve(context);
-                    }, 1000);
+                    };
+                    component.set("v.startFn", startFn);
                 });
             },
             focus: function (focusedComponent, description) {
@@ -41,7 +53,7 @@
                 }
             },
             wait: function (handler) {
-                return $A.getCallback( // allows changes to lightning attributes https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_promises.htm
+                return $A.getCallback(
                     function (v) {
                         return new Promise(function (resolve, reject) {
                             try {
@@ -54,7 +66,7 @@
                     });
             },
             whenDone: function (handler) {
-                return $A.getCallback( // allows changes to lightning attributes https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_promises.htm
+                return $A.getCallback(
                     function (v) {
                         return new Promise(function (resolve, reject) {
                             try {
@@ -68,7 +80,8 @@
                     });
             },
             pass: function (context) {
-                console.log("PASSED: " + JSON.stringify(context));
+                console.log("PASSED: Test context data will be displayed in console below.");
+                console.log(context);
                 component.set("v.status", "PASS");
             },
             fail: function (error) {
@@ -79,7 +92,7 @@
     },
     addAssertion: function (component, type, params) {
         var helper = this;
-        return $A.getCallback( // see above comment in "wait"
+        return $A.getCallback(
             function (context) { // when invoked using .then, this will wait for the previous promise to resolve
                 return new Promise(function (resolve, reject) {
                     params.value = context.focused.get(params.expr);
@@ -127,8 +140,7 @@
                     );
                 });
             });
-    }
-    ,
+    },
     filterAssertions: function (component) {
         var showSuccess = component.get("v.showSuccesses");
         var all = component.get("v.assertions") || [];
@@ -139,5 +151,30 @@
             }
         }
         component.set("v.visibleAssertions", visible);
+    },
+    sendToService: function (component, method, params, callback) {
+        var action = component.get(method);
+        if (params) {
+            action.setParams(params);
+        }
+        action.setCallback(this, function (response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                callback(response.getReturnValue());
+            } else if (component.isValid() && state === "ERROR") {
+                $A.error("service call ERROR");
+                this.showUnexpectedError(component);
+            } else if (state === "ERROR") {
+                var errors = response.getError();
+                if (errors) {
+                    $A.error("service call ERROR: " + errors[0].message);
+                    this.showUnexpectedError(component);
+                } else {
+                    $A.error("Unknown error");
+                    this.showUnexpectedError(component);
+                }
+            }
+        });
+        $A.enqueueAction(action);
     }
 })
