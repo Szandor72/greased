@@ -82,11 +82,11 @@
             pass: function (context) {
                 console.log("PASSED: Test context data will be displayed in console below.");
                 console.log(context);
-                component.set("v.status", "PASS");
+                component.set("v.status", "PASSED");
             },
             fail: function (error) {
                 console.log(error);
-                component.set("v.status", "FAIL");
+                component.set("v.status", "FAILED");
             }
         };
     },
@@ -95,6 +95,9 @@
         return $A.getCallback(
             function (context) { // when invoked using .then, this will wait for the previous promise to resolve
                 return new Promise(function (resolve, reject) {
+                    if ($A.util.isUndefinedOrNull(context.focused)) {
+                        throw Error("No component is focused. Use test.start or test.focus!");
+                    }
                     params.value = context.focused.get(params.expr);
                     $A.log('asserting: ' + params.description + " " + params.expr + " " + params.result);
                     $A.log('context: ' + JSON.stringify(context));

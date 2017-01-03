@@ -30,28 +30,17 @@
 
     <lightning:layout horizontalAlign="space">
         <lightning:layoutItem flexibility="auto" padding="around-small">
-            Controls
-        </lightning:layoutItem>
-        <lightning:layoutItem flexibility="auto" padding="around-small">
             <ui:inputCheckbox label="Show successful Assertions" value="{!v.showSuccesses}"/>
         </lightning:layoutItem>
     </lightning:layout>
+
+    <c:greased_TestStatus status="{!v.status}" count="{!v.assertions.length}"/>
 
     <hr/>
 
         {!v.body}
 
     <div>
-        <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
-            <span class="slds-assistive-text">Success</span>
-            <h2>
-            {!v.status}
-                <lightning:icon iconName="utility:check" size="small" class="success"/>
-                    {!v.assertions.length} Assertion(s) Completed
-            </h2>
-        </div>
-        <br/>
-
             {!v.visibleAssertions}
     </div>
 
