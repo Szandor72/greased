@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>greased_TestLoader</members>
+        <members>greased_TestLoaderTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
         <members>greased_AssertionCommon</members>
         <members>greased_AssertionEquals</members>
         <members>greased_AssertionGroup</members>
