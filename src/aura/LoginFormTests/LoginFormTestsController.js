@@ -37,6 +37,7 @@
             .then(test.wait(function (context) {
                 loginAllowed.set("v.password", "labrynth");
             }))
+            .then(test.assertNotEquals("", "v.password", "Password attribute has a value")) // not useful but demonstrates assertNotEquals
             .then(test.assertEquals("labrynth", "v.password", "Password attribute has been updated"))
             .then(test.assertEquals(false, "v.disabled",
                 "Login button is enabled when both username and password have been entered"))

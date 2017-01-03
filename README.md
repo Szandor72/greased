@@ -3,7 +3,6 @@ A collection of Lightning components useful for developers and admins
 
 ## TODO
 
-* fake boxcar request with start delay to allow all components to load
 * N component support
 * module fn to group assertions. assertion group component to show them at bottom of screen
 * test greased using greased (status bar and assertion group components)
