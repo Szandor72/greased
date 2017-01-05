@@ -41,6 +41,7 @@ The comments there should be clear but please log an issue if something is not c
 
 ## TODO
 
+* forked chains example i.e. parallel testing of N components
 * better diff display for assertEquals component
 * custom logger with control toggles switched on from the url/attribute and links
 * non-supported browser thenable support
