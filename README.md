@@ -14,6 +14,7 @@ Testing components using this technique provides two benefits:
 
 * Normal testing, assertions and regression protection
 * Faster development feedback by viewing N copies of your component in different states at the same time
+* Works with the LockerService enabled
 
 ## Install
 
@@ -33,14 +34,24 @@ Testing components using this technique provides two benefits:
 
 then change your browser uri to:
 
-* /c/LoginFormTests.app : a sample test for a sample login component
+* /c/greased_LoginFormTests.app : a sample test for a sample login component
 * /c/greased_TestStatusTests.app : tests for the components that make up the tool
 
 The best way to learn how to use the tool is to [look at the sample app test](https://github.com/stevebuik/greased/blob/master/src/aura/LoginFormTests/LoginFormTestsController.js). 
 The comments there should be clear but please log an issue if something is not clear and I'll fix it.
 
-## TODO
+## Supported Browsers
 
+Since most actions in Lightning are asynchronous, the test scripts are built using chains of Promises. The 
+[documentation states](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_promises.htm) that promises are available in all supported browsers.
+
+If you are building components for Communities or Sites then you can't control if your users are using "supported" browsers or not. In that case, you can still use promises in your tests but do not use them in you components. If you do this it also means that you cannot run these tests in the unsupported browsers and that means you lose some valuable automatic testing. For that reason, these is a TODO below to provide just enough "then" support as part of Greased so that tests wll run in any browser.
+
+
+## TODO (looking for volunteers, contact me if you can help)
+
+* attribute to skip the fake apex call/race condition. used for tests that are client side only
+* focus descriptions can be displayed in UI above components
 * forked chains example i.e. parallel testing of N components
 * better diff display for assertEquals component
 * custom logger with control toggles switched on from the url/attribute and links

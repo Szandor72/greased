@@ -1,7 +1,7 @@
 <aura:component>
     <c:greased_TestLinks
             links="[
-            '/c/LoginFormTests.app',
+            '/c/greased_LoginFormTests.app',
             '/c/greased_TestStatusTests.app',
             '/c/greased_AssertionGroupTests.app'
             ]"/>
