@@ -3,7 +3,7 @@ End to End testing for Lightning Components
 
 ![Demo](demo.gif "Demo")
 
-Eventually Salesforce will provide a test framework for Lightning. Until then, use Greased.
+Salesforce has plans (Safe-Harbour) to release a testing framework for Lightning but you can use this now. 
 
 It's basically a Selenium test written in Lightning flavoured javascript. 
 By testing this way, you can use the test during development to decrease your time to feedback.
