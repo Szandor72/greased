@@ -99,8 +99,11 @@
                     if ($A.util.isUndefinedOrNull(context.focused)) {
                         throw Error("No component is focused. Use test.start or test.focus!");
                     }
-                    params.value = context.focused.get(params.expr);
-                    $A.log('asserting: ' + params.description + " " + params.expr + " " + params.result);
+                    var actualValue = context.focused.get(params.expr);
+                    // clone the value so that it's immutable i.e. other "threads" don't change it before the assertion can check it
+                    var clonedValue = JSON.parse(JSON.stringify(actualValue));
+                    params.value = clonedValue;
+                    $A.log('asserting: ' + params.description + " " + params.expr + " " + JSON.stringify(params.value));
                     $A.log('context: ' + JSON.stringify(context));
                     $A.log('params: ' + JSON.stringify(params));
 
