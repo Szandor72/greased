@@ -52,6 +52,13 @@ Since most actions in Lightning are asynchronous, the test scripts are built usi
 
 If you are building components for Communities or Sites then you can't control if your users are using "supported" browsers or not. In that case, you can still use promises in your tests but do not use them in you components. If you do this it also means that you cannot run these tests in the unsupported browsers and that means you lose some valuable automatic testing. For that reason, there is [an outstanding issue](https://github.com/stevebuik/greased/issues/8) to provide just enough "then" support as part of Greased so that tests can run in any browser. I'm hoping someone with more javascript skills than me (is that you?) can complete this one because Communities/Sites really need test coverage to be reliable.
 
+## Credits
+
+The idea of running assertions as an application came from watching https://www.youtube.com/watch?v=Hxmbl2Oj_cM but I tried this and it didn't work with the LockerService. I thought about it and realised that I only needed Assertions and Diff so I found https://github.com/flitbit/diff and discovered that it does work under LockerService. Building assertions on top of this was an easy leap.
+
+The idea of testing N instances of the same component came from https://github.com/bhauman/devcards I've used this a lot in Clojurescript development and I figured that Lightning development benefits the same way so I built this into Greased.
+
+Kudos to [Phillip Clark](https://github.com/flitbit), @bob_buzzard and @bhauman for sharing. This kind of cross-pollination is what OSS is all about.
 
 ## TODO (looking for volunteers, contact me if you can help)
 
