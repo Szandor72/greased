@@ -14,7 +14,12 @@ Testing components using this technique provides two benefits:
 
 * Normal testing, assertions and regression protection
 * Faster development feedback by viewing N copies of your component in different states at the same time
+
+## Features
+
 * Works with the LockerService enabled
+* Can be used End to End testing full apps a la Selenium or at the smallest component level
+* Support for testing Apex calls when loading a component and after user interactions, as well as asserting state changes after Apex calls complete
 
 ## Install
 
@@ -45,16 +50,9 @@ The comments there should be clear but please log an issue if something is not c
 Since most actions in Lightning are asynchronous, the test scripts are built using chains of Promises. The 
 [documentation states](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_promises.htm) that promises are available in all supported browsers.
 
-If you are building components for Communities or Sites then you can't control if your users are using "supported" browsers or not. In that case, you can still use promises in your tests but do not use them in you components. If you do this it also means that you cannot run these tests in the unsupported browsers and that means you lose some valuable automatic testing. For that reason, there is a TODO below to provide just enough "then" support as part of Greased so that tests can run in any browser.
+If you are building components for Communities or Sites then you can't control if your users are using "supported" browsers or not. In that case, you can still use promises in your tests but do not use them in you components. If you do this it also means that you cannot run these tests in the unsupported browsers and that means you lose some valuable automatic testing. For that reason, there is [an outstanding issue](https://github.com/stevebuik/greased/issues/8) to provide just enough "then" support as part of Greased so that tests can run in any browser. I'm hoping someone with more javascript skills than me (is that you?) can complete this one because Communities/Sites really need test coverage to be reliable.
 
 
 ## TODO (looking for volunteers, contact me if you can help)
 
-* attribute to skip the fake apex call/race condition. used for tests that are client side only
-* focus descriptions can be displayed in UI above components
-* forked chains example i.e. parallel testing of N components
-* better diff display for assertEquals component
-* custom logger with control toggles switched on from the url/attribute and links
-* non-supported browser thenable support
-* SauceLabs/Selenium script to run a test
-* ANT htmlunit task to invoke from CI
+Check [the FEATURE issues](https://github.com/stevebuik/greased/issues) for new features that would really help everyone who uses this tool. I will sing the praises of anyone who contributes.
