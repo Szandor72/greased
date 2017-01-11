@@ -23,6 +23,7 @@
         startTests
             .then(test.assert("v.loaded", "The form should be loaded before tests start"))
             .then(test.wait(function (context) { // use test.wait to block the chain after this function
+                // do anything in here. if you want to set attributes on the focused component, use test.setAttribute. See below.
                 empty.set("v.username", "");
             }))
             .then(test.assertEquals("", "v.username", "Username attribute is empty"))
@@ -36,9 +37,7 @@
             //////////// #3 ENABLED ////////////
 
             .then(test.focus(loginAllowed, 'The 3rd login form will have both fields populated so should allow login attempts'))
-            .then(test.wait(function (context) {
-                loginAllowed.set("v.password", "labrynth");
-            }))
+            .then(test.setAttribute("v.password", "labrynth")) // an abbreviated way to set a single attribute. prefer this for brevity
             .then(test.assertNotEquals("", "v.password", "Password attribute has a value")) // not useful but demonstrates assertNotEquals
             .then(test.assertEquals("labrynth", "v.password", "Password attribute has been updated"))
             .then(test.assertEquals(false, "v.disabled",
@@ -47,6 +46,7 @@
             ////////// #4 REJECTED ////////////
 
             .then(test.focus(loginRejected, 'The 4th login form will have both fields populated so should allow login attempts'))
+            .then(test.setAttributes({"v.password":"labrynth"})) // another abbreviated way to set attributes. this supports N attributes in one call
             .then(test.wait(function (context) {
                 loginRejected.set("v.password", "labrynth");
             }))

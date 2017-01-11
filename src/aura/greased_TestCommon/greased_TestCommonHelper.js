@@ -33,6 +33,20 @@
                     return context;
                 }
             },
+            setAttribute: function (attribute, value) {
+                return function (context) {
+                    context.focused.set(attribute, value);
+                    return context;
+                }
+            },
+            setAttributes: function (values) {
+                return function (context) {
+                    for (var key in values) {
+                        context.focused.set(key, values[key]);
+                    }
+                    return context;
+                }
+            },
             assert: function (expr, description) {
                 return helper.addAssertion(component, "c:greased_AssertionOK", {
                     expr: expr,
@@ -177,7 +191,7 @@
             }
         )
     },
-    handleToggle: function(component) {
+    handleToggle: function (component) {
         var show = component.get("v.showAssertions");
         component.set("v.showAssertions", !show);
     },

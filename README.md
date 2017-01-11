@@ -55,6 +55,10 @@ Eventually there will be a @TestVisible equivalent for Lightning. For now there 
 
 When Apex calls are made, you need to invoke using a function which takes a callback. This allows the test (Promise) to wait for your Apex to return before proceeding. There is an example of this in the sample app/test.
 
+## Change Log
+
+Jan 11, 2017: added test.setAttribute and test.setAttributes to reduce boilerplate in tests 
+
 ## Supported Browsers
 
 Since most actions in Lightning are asynchronous, the test scripts are built using chains of Promises. The 

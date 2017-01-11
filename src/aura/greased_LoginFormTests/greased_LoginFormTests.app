@@ -2,6 +2,8 @@
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
+    <c:greased_ComponentTestLinks/>
+
     <p>This test runs 4 instances of the component being tested (LoginForm) and drives each instance into a different state.
         Assertions are then made to ensure that the attributes of each instance contains the expected data.</p>
 
