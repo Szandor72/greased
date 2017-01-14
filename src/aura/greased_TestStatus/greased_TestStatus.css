@@ -1,0 +1,12 @@
+.THIS .running {
+    top: -11px;
+    left: 65%;
+}
+
+.THIS .success {
+    margin: 0 10px 0 5px;
+}
+
+.THIS .success svg {
+    fill: white ;
+}

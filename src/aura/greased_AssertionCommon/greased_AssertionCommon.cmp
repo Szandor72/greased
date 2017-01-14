@@ -1,0 +1,83 @@
+<aura:component description="The common UI and functions for all assertion components"
+                abstract="true">
+
+    <aura:attribute name="expr" type="String" access="public"
+                    description="the attribute being checked"/>
+    <aura:attribute name="value" type="Object" access="public"
+                    description="the value of the attribute being checked"/>
+    <aura:attribute name="result" type="Boolean" access="public"
+                    description="true when the assertion is successful"/>
+    <aura:attribute name="description" type="String" access="public"
+                    description="A short message displayed in results"/>
+    <aura:attribute name="assertionType" type="String" access="public" default="TODO"
+                    description="Describes the check performed by this assertion"/>
+    <aura:attribute name="problem" type="String" access="public"
+                    description="Describes the problem if the assertion fails"/>
+
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                <div class="slds-media__body slds-truncate">
+                    <h2>
+                        <lightning:icon iconName="{!'action:'+(v.result?'approval':'close')}" size="xx-small"/>
+                        <a href="javascript:void(0);" class="slds-text-link--reset">
+                            <span class="slds-text-heading--small">{!v.description}</span>
+                        </a>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body">
+            <div class="slds-card__body--inner slds-grid slds-wrap slds-grid--pull-padded">
+                <div class="slds-tile slds-media slds-card__tile slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-3 slds-hint-parent">
+                    <div class="slds-media__body">
+                        <div class="slds-tile__detail slds-text-body--small">
+                            <dl class="slds-dl--horizontal">
+                                <dt class="slds-dl--horizontal__label">
+                                    <span class="slds-truncate" title="Type">Assertion Type:</span>
+                                </dt>
+                                <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <span class="slds-truncate" title="Visit">{!v.assertionType}</span>
+                                </dd>
+                                <dt class="slds-dl--horizontal__label">
+                                    <span class="slds-truncate" title="Type">Expression:</span>
+                                </dt>
+                                <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <span class="slds-truncate" title="Visit">{!v.expr}</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-tile slds-media slds-card__tile slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-3 slds-hint-parent">
+                    <div class="slds-media__figure">
+                        <div class="slds-icon_container">
+                            <span class="slds-assistive-text">Contact</span>
+                        </div>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-tile__detail slds-text-body--small">
+                                {!v.body}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-tile slds-media slds-card__tile slds-p-horizontal--small slds-size--1-of-1 slds-medium-size--1-of-3 slds-hint-parent">
+                    <div class="slds-media__body">
+                        <aura:if isTrue="{!not(v.result)}">
+                            <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+                                <h3 class="slds-truncate">Problem</h3>
+                            </div>
+                            <div class="slds-tile__detail slds-text-body--small">
+                                    {!v.problem}
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-card__footer">
+            <div/>
+        </div>
+    </article>
+
+</aura:component>

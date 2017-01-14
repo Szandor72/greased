@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT"
+            description="Fired by Show/Hide button to control Assertion display">
+</aura:event>

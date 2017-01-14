@@ -1,0 +1,6 @@
+##MAVENSMATE##
+config/ 
+*.sublime-project 
+*.log 
+deploy/ 
+debug/

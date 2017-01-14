@@ -1,0 +1,47 @@
+<aura:component description="The status bar displayed at the top of a Greased Test page">
+
+    <aura:attribute name="status" type="String" description="The state of the entire test"
+                    default="INIT" access="public"/>
+    <aura:attribute name="count" type="Integer" description="The count of assertions completed"
+                    access="public" default="0"/>
+
+    <aura:attribute name="cssTheme" type="String" default="" access="public"/>
+    <aura:attribute name="icon" type="String" default="" access="public"/>
+
+    <aura:registerEvent name="toggleDisplay" type="c:greased_ToggleDisplayEvent"/>
+
+    <aura:handler name="change" value="{!v.status}" action="{!c.deriveStyles}"/>
+
+    <div class="{!'slds-notify slds-notify--alert '+ v.cssTheme +' slds-theme--alert-texture'}" role="alert">
+
+        <lightning:layout horizontalAlign="space">
+            <lightning:layoutItem flexibility="auto" size="4">
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" size="4">
+            {!v.status}
+                <aura:if isTrue="{!empty(v.icon)}">
+                    <div class="slds-is-relative">
+                        <div class="slds-spinner--inverse slds-spinner slds-spinner--small running"
+                             role="alert">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                    <aura:set attribute="else">
+                        <lightning:icon iconName="{!v.icon}" size="small" class="success"/>
+                    </aura:set>
+                </aura:if>
+                    {!v.count} Assertion(s) Completed
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" size="4">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right">
+                        <lightning:button label="Show/Hide Assertions" onclick="{!c.toggleAssertions}"/>
+                    </div>
+                </section>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+</aura:component>

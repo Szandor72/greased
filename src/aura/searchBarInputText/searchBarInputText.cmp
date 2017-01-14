@@ -1,0 +1,19 @@
+<aura:component >
+    <!--TODO remove! init only for debugger purpose -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!--greased supports only public attributes -->
+    <aura:attribute access="public" name="characterCount" type="Integer" default="0"
+                    description="Counts characters in the searchbar"/>
+    <aura:attribute access="public" name="searchText" type="String" default=""
+                    description="The text to search for"/>
+    <lightning:input name="searchfield"
+                     label="Search"
+                     type="text" 
+                     placeholder="Enter search..."
+                     aura:id="searchInput"
+                     value="{!v.searchText}"
+                     required="true"/>
+    <aura:if isTrue="{!and(v.characterCount gt 0,v.characterCount lt 4)}">
+        <lightning:badge label="Please enter more text" aura:id="warningBadge"/>
+    </aura:if>
+</aura:component>
