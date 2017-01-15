@@ -2,12 +2,15 @@
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
-    <c:greased_ComponentTestLinks />
+    <c:greased_ComponentTestLinks/>
 
-    <p>Note that there are no assertions made here.
-        This is just used to check Groups with/without Assertions and how the various Assertion compare to each other.</p>
+    <p>Note: assertions in this test are fake. Just made to check the display of assertions in groups.</p>
 
-    <c:greased_AssertionGroup aura:id="empty"/>
-    <c:greased_AssertionGroup aura:id="full"/>
+    <p>Change one of the assertions to fail if you are working on failure display</p>
+
+    <div class="slds-hide">
+        <ui:inputText aura:id="input1" value="foo" label="Name"/>
+        <ui:inputText aura:id="input2" value="bar" label="Name"/>
+    </div>
 
 </aura:application>

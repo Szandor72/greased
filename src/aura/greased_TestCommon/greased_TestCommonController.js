@@ -1,15 +1,8 @@
 ({
-    doCommonInit: function (component, event, helper) {
-        helper.sendToService(component, "c.load", {}, function (loadResult) {
-            component.set("v.apexLoaded", true);
-            helper.handleLoadRace(component, event, helper);
-        })
-    },
-    jsReady: function (component, event, helper) {
-        component.set("v.javascriptLoaded", true);
-        helper.handleLoadRace(component, event, helper);
-    },
-    handleToggle: function (component, event, helper) {
-        helper.handleToggle(component);
+    handleInit: function (component, event, helper) {
+        // set base component in an attribute so it can be read by fns invoked from sub-components
+        // using a component event for this is a workaround to LockerService inheritance access behaviour
+        component.set("v.baseComponent", component.find("base"));
+        event.stopPropagation();
     }
 })
