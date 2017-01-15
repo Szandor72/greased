@@ -1,3 +1,4 @@
-<aura:application extends="force:slds">
-    <c:searchBarInputText characterCount="2"/>
-</aura:application>
+<aura:application access="GLOBAL"
+    extends="ltng:outApp">
+    <aura:dependency resource="c:searchBarInputTextTest" />
+    </aura:application>

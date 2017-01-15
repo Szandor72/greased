@@ -1,0 +1,6 @@
+<aura:component extends="c:greased_TestBase">
+    <aura:handler name="init"
+        value="{!this}"
+        action="{!c.doInit}" />
+    <c:searchBarInputText aura:id="brandNewComponent" />
+</aura:component>
