@@ -6,14 +6,20 @@
                     description="Counts characters in the searchbar"/>
     <aura:attribute access="public" name="searchText" type="String" default=""
                     description="The text to search for"/>
+    <aura:attribute access="public" name="minimumCharacterLength" type="Integer"
+                     description="Number of characters necessary to perform a search"/>
     <lightning:input name="searchfield"
                      label="Search"
                      type="text" 
                      placeholder="Enter search..."
                      aura:id="searchInput"
                      value="{!v.searchText}"
-                     required="true"/>
-    <aura:if isTrue="{!and(v.characterCount gt 0,v.characterCount lt 4)}">
+                     required="true"
+                     onblur="{!c.onSearchInputChange}"
+                     onchange="{!c.onSearchInputChange}"/>
+    <aura:if isTrue="{!and(v.characterCount gt 0,v.characterCount lt v.minimumCharacterLength)}">
         <lightning:badge label="Please enter more text" aura:id="warningBadge"/>
     </aura:if>
+    v.characterCount: {!v.characterCount}<br/>
+    v.searchText: {!v.searchText}
 </aura:component>

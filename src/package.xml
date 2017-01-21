@@ -9,8 +9,8 @@
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
-        <members>greased_diff</members>
+        <members>*</members>
         <name>StaticResource</name>
     </types>
-    <version>38.0</version>
+    <version>37.0</version>
 </Package>

@@ -8,15 +8,15 @@
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
     <div>
-        <lightning:layout>
-            <lightning:layoutItem>
+        <lightning:layout >
+            <lightning:layoutItem >
                 <lightning:button label="Run All" onclick="{!c.runAll}" variant="brand"/>
             </lightning:layoutItem>
-            <lightning:layoutItem>
+            <lightning:layoutItem >
                 <aura:iteration items="{!v.rows}" var="row">
                     <lightning:layout horizontalAlign="spread">
                         <aura:iteration items="{!row}" var="link">
-                            <lightning:layoutItem>
+                            <lightning:layoutItem >
                                 <aura:if isTrue="{!not(empty(link.label))}">
                                     <a href="{!link.uri}">{!link.label}</a>
                                 </aura:if>
