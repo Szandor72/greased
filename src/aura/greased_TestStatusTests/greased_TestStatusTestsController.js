@@ -19,16 +19,13 @@
             .then(test.setAttribute("v.status", "INIT"))
             .then(test.assertEquals("", "v.cssTheme", "Initial CSS style"))
 
-
             .then(test.focus(loaded, 'In the loading state'))
             .then(test.setAttribute("v.status", "LOADING"))
             .then(test.assertEquals("", "v.cssTheme", "Loading CSS style"))
 
-
             .then(test.focus(running, 'In the running state'))
             .then(test.setAttribute("v.status", "RUNNING"))
-            .then(test.assertEquals("slds-theme--success", "v.cssTheme", "Running CSS style"))
-
+            .then(test.assertEquals("", "v.cssTheme", "Running CSS style"))
 
             .then(test.focus(passed, 'In the passed state'))
             .then(test.setAttribute("v.status", "PASSED"))

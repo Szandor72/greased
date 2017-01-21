@@ -1,0 +1,14 @@
+<aura:component description="Another example that illustrates how to design and test components">
+
+    <aura:attribute name="options" type="List" default="[0,1,2]"/>
+
+    <aura:attribute name="count" type="Integer" access="public"/>
+
+    <ui:inputSelect value="{!v.count}" label="How many green bottles..">
+        <ui:inputSelectOption label="hanging on the wall?" text="0" disabled="true"/>
+        <aura:iteration items="{!v.options}" var="i">
+            <ui:inputSelectOption label="{!i}" text="{!i}"/>
+        </aura:iteration>
+    </ui:inputSelect>
+
+</aura:component>

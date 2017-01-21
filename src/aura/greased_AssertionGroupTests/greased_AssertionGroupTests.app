@@ -2,7 +2,7 @@
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
 
-    <c:greased_ComponentTestLinks />
+    <c:greased_ComponentTestLinks/>
 
     <p>Note: assertions in this test are fake. Just made to check the display of assertions in groups.</p>
 

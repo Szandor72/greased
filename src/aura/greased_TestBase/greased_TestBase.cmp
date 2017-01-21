@@ -1,82 +1,55 @@
-<aura:component access="GLOBAL"
-    description="Inherited features for all Greased tests."
-    controller="greased_TestLoader"
-    extensible="true">
-    <!-- XMLHttpRequest cannot load https://sz-greased-dev-ed.lightning.force.com/resource/1484338140000/greased_diff. No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'https://greased.herokuapp.com' is therefore not allowed access. -->
-    <ltng:require scripts="{!'https://sz-greased-dev-ed.lightning.force.com'+$Resource.greased_diff}"
-        afterScriptsLoaded="{!c.jsReady}" />
+<aura:component description="Inherited features for all Greased tests."
+                controller="greased_TestLoader">
 
-    <aura:attribute name="driver"
-        type="Object"
-        access="public"
-        description="The driver object used by tests" />
+    <ltng:require scripts="{!$Resource.greased_diff}" afterScriptsLoaded="{!c.jsReady}"/>
 
-    <aura:attribute name="status"
-        type="String"
-        access="public"
-        default="LOADING"
-        description="The status of the test" />
+    <aura:attribute name="driver" type="Object" access="public"
+                    description="The driver object used by tests"/>
 
-    <aura:attribute name="count"
-        type="Integer"
-        access="public"
-        default="0"
-        description="The count of assertions processed" />
+    <aura:attribute name="status" type="String" access="public" default="LOADING"
+                    description="The status of the test"/>
 
-    <aura:attribute name="assertionGroups"
-        type="Aura.Component[]"
-        access="public"
-        description="All assertions, grouped by focused component description" />
-    <aura:attribute name="failure"
-        type="Aura.Component"
-        access="public"
-        description="The failed assertion, always displayed" />
-    <aura:attribute name="showAssertions"
-        type="Boolean"
-        default="false"
-        description="When true, shows assertions" />
+    <aura:attribute name="assertionCount" type="Integer" access="public" default="0"
+                    description="The count of assertions processed"/>
 
-    <aura:attribute name="javascriptLoaded"
-        type="Boolean"
-        default="false"
-        access="public"
-        description="Set true when all the javascript assets have been loaded" />
-    <aura:attribute name="apexLoaded"
-        type="Boolean"
-        default="false"
-        access="public"
-        description="Set true when the initial Apex called have been completed" />
-    <aura:attribute name="startFn"
-        type="Object"
-        access="public"
-        description="The fn that will be invoked when the tests can begin" />
+    <aura:attribute name="assertionGroups" type="Aura.Component[]" access="public"
+                    description="All assertions, grouped by focused component description"/>
+    <aura:attribute name="currentAssertionGroup" type="Aura.Component" access="public"
+                    description="The group currently in focus."/>
+    <aura:attribute name="failure" type="Aura.Component" access="public"
+                    description="The failed assertion, always displayed"/>
+    <aura:attribute name="showAssertions" type="Boolean" default="false"
+                    description="When true, shows assertions"/>
 
-    <aura:handler name="init"
-        value="{!this}"
-        action="{!c.doCommonInit}" />
+    <aura:attribute name="javascriptLoaded" type="Boolean" default="false" access="public"
+                    description="Set true when all the javascript assets have been loaded"/>
+    <aura:attribute name="apexLoaded" type="Boolean" default="false" access="public"
+                    description="Set true when the initial Apex called have been completed"/>
+    <aura:attribute name="startFn" type="Object" access="public"
+                    description="The fn that will be invoked when the tests can begin"/>
 
-    <aura:handler name="toggleDisplay"
-        event="c:greased_ToggleDisplayEvent"
-        action="{!c.handleToggle}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doCommonInit}"/>
 
-    <aura:method name="loadDriver"
-        access="public"
-        description="Loads the driver object into v.driver, ready for external access" />
+    <aura:handler name="toggleDisplay" event="c:greased_ToggleDisplayEvent" action="{!c.handleToggle}"/>
 
-    <aura:method name="toggleAssertions"
-        access="public"
-        description="hides/shows the assertions" />
+    <aura:method name="loadDriver" access="public"
+                 description="Loads the driver object into v.driver, ready for external access"/>
 
-    <c:greased_TestStatus status="{!v.status}"
-        count="{!v.count}" />
+    <aura:method name="toggleAssertions" access="public"
+                 description="hides/shows the assertions"/>
 
-    <hr/> {!v.body}
+    <c:greased_TestStatus status="{!v.status}" count="{!v.assertionCount}"/>
+
+    <hr/>
+
+        {!v.body}
+
     <hr/>
 
     <aura:if isTrue="{!v.showAssertions}">
-        {!v.assertionGroups}
+            {!v.assertionGroups}
     </aura:if>
 
-    {!v.failure}
+        {!v.failure}
 
-    </aura:component>
+</aura:component>

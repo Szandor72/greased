@@ -48,24 +48,56 @@
                 }
             },
             assert: function (expr, description) {
-                return helper.addAssertion(component, "c:greased_AssertionOK", {
-                    expr: expr,
-                    description: description
-                });
+                if (helper.isAttributeExpression(expr)) {
+                    return helper.addFocusedExpressionAssertion(component, "c:greased_AssertionOK", {
+                        expr: expr,
+                        description: description
+                    });
+                } else if (helper.isFunctionExpression(expr)) {
+                    return helper.addValueFunctionAssertion(component, helper, "c:greased_AssertionOK",
+                        {
+                            expr: "n/a",
+                            description: description
+                        }, expr);
+                } else {
+                    throw Error("Assertions can evaluate either a 'v.attribute' string of a function when checking values. You passed a: " + (typeof expr))
+                }
             },
             assertEquals: function (expected, expr, description) {
-                return helper.addAssertion(component, "c:greased_AssertionEquals", {
-                    expr: expr,
-                    expected: expected,
-                    description: description
-                });
+                if (helper.isAttributeExpression(expr)) {
+                    return helper.addFocusedExpressionAssertion(component, "c:greased_AssertionEquals", {
+                        expr: expr,
+                        expected: expected,
+                        description: description
+                    });
+                } else if (helper.isFunctionExpression(expr)) {
+                    return helper.addValueFunctionAssertion(component, helper, "c:greased_AssertionEquals",
+                        {
+                            expr: "n/a",
+                            expected: expected,
+                            description: description
+                        }, expr);
+                } else {
+                    throw Error("Assertions can evaluate either a 'v.attribute' string or a function when checking values. You passed a: " + (typeof expr))
+                }
             },
             assertNotEquals: function (expected, expr, description) {
-                return helper.addAssertion(component, "c:greased_AssertionNotEquals", {
-                    expr: expr,
-                    expected: expected,
-                    description: description
-                });
+                if (helper.isAttributeExpression(expr)) {
+                    return helper.addFocusedExpressionAssertion(component, "c:greased_AssertionNotEquals", {
+                        expr: expr,
+                        expected: expected,
+                        description: description
+                    });
+                } else if (helper.isFunctionExpression(expr)) {
+                    return helper.addValueFunctionAssertion(component, helper, "c:greased_AssertionNotEquals",
+                        {
+                            expr: "n/a",
+                            expected: expected,
+                            description: description
+                        }, expr);
+                } else {
+                    throw Error("Assertions can evaluate either a 'v.attribute' string or a function when checking values. You passed a: " + (typeof expr))
+                }
             },
             wait: function (handler) {
                 return $A.getCallback(
@@ -77,6 +109,16 @@
                             } catch (e) {
                                 reject(e);
                             }
+                        });
+                    });
+            },
+            sleep: function (ms) {
+                return $A.getCallback(
+                    function (v) {
+                        return new Promise(function (resolve, reject) {
+                            setTimeout(function () {
+                                resolve(v);
+                            }, ms)
                         });
                     });
             },
@@ -100,69 +142,98 @@
                 component.set("v.status", "PASSED");
             },
             fail: function (error) {
-                console.log(error);
+                console.log("FAILED: Error data will be displayed in console below.");
+                console.log(error.message);
+                console.log(error.stackTrace);
                 component.set("v.status", "FAILED");
             }
         };
     },
-    addAssertion: function (component, type, params) {
+    isAttributeExpression: function (expr) {
+        return typeof expr == "string" && expr.indexOf("v.") == 0;
+    },
+    isFunctionExpression: function (expr) {
+        return typeof expr == "function";
+    },
+    addFocusedExpressionAssertion: function (component, type, params) {
         var helper = this;
         return $A.getCallback(
             function (context) { // when invoked using .then, this will wait for the previous promise to resolve
                 return new Promise(function (resolve, reject) {
+
                     if ($A.util.isUndefinedOrNull(context.focused)) {
                         throw Error("No component is focused. Use test.start or test.focus!");
                     }
+
+                    // evaluate the value expression using the focused component
                     var actualValue = context.focused.get(params.expr);
                     // clone the value so that it's immutable i.e. other "threads" don't change it before the assertion can check it
                     var clonedValue = JSON.parse(JSON.stringify(actualValue));
+                    // load the value into the params for the assertion
                     params.value = clonedValue;
-                    $A.log('asserting: ' + params.description + " " + params.expr + " " + JSON.stringify(params.value));
-                    $A.log('context: ' + JSON.stringify(context));
-                    $A.log('params: ' + JSON.stringify(params));
 
-                    var currentGroup = context.group;
-                    var isNewGroupRequired = $A.util.isUndefinedOrNull(currentGroup) ||
-                        context.description != context.group.get("v.description");
+                    helper.addAssertionAndGroup(component, type, params, context, resolve, reject);
 
-                    if (isNewGroupRequired) {
-                        helper.newAssertionGroup(component, context.description,
-                            function (group) {
-                                var groups = component.get("v.assertionGroups");
-                                groups.push(group);
-                                context.group = group;
-                                component.set("v.assertionGroups", groups);
-                                helper.newAssertion(type, params, function (assertion) {
-                                    var assertionPassed = assertion.get("v.result");
-                                    if (assertionPassed) {
-                                        helper.addAssertionToGroup(group, assertion);
-                                        resolve(context);
-                                    } else {
-                                        component.set("v.failure", assertion);
-                                        reject(Error(context.description + " : " + params.description));
-                                    }
-                                });
-                            });
-                    } else {
-                        helper.newAssertion(type, params, function (assertion) {
-                            var assertionPassed = assertion.get("v.result");
-                            if (assertionPassed) {
-                                helper.addAssertionToGroup(currentGroup, assertion);
-                                resolve(context);
-                            } else {
-                                component.set("v.failure", assertion);
-                                reject(Error(context.description + " : " + params.description));
-                            }
-                        });
-                    }
+                });
+            });
+    },
+    addValueFunctionAssertion: function (component, helper, type, params, valueFunction) {
+        return $A.getCallback(
+            function (context) {
+                return new Promise(function (resolve, reject) {
 
-                    helper.incrementCount(component);
+                    // invoking the value fn here ensures evaluation of the expr blocks till this promise is executed
+                    params.value = valueFunction(context);
+
+                    helper.addAssertionAndGroup(component, type, params, context, resolve, reject);
                 });
             });
     },
     incrementCount: function (component) {
-        var c = component.get("v.count");
-        component.set("v.count", c + 1);
+        var c = component.get("v.assertionCount");
+        component.set("v.assertionCount", c + 1);
+    },
+    isNewGroupRequired: function (component, context) {
+        var currentGroup = component.get("v.currentAssertionGroup");
+        return $A.util.isUndefinedOrNull(currentGroup) || context.description != currentGroup.get("v.description");
+    },
+    addAssertionAndGroup: function (component, type, params, context, resolve, reject) {
+        var isNewGroupRequired = this.isNewGroupRequired(component, context);
+        var helper = this;
+        if (isNewGroupRequired) {
+            helper.newAssertionGroup(component, context.description,
+                function (group) {
+                    var groups = component.get("v.assertionGroups");
+                    groups.push(group);
+                    component.set("v.assertionGroups", groups);
+                    component.set("v.currentAssertionGroup", group);
+
+                    // TODO use promises to chain these together
+                    helper.newAssertion(type, params, function (assertion) {
+                        helper.addAssertionToCurrent(component, assertion, context, resolve, reject);
+                    });
+                });
+        } else {
+            helper.newAssertion(type, params, function (assertion) {
+                helper.addAssertionToCurrent(component, assertion, context, resolve, reject);
+            });
+        }
+    },
+    addAssertionToCurrent: function (component, assertion, context, resolve, reject) {
+        var group = component.get("v.currentAssertionGroup");
+        var assertionPassed = assertion.get("v.result");
+        this.incrementCount(component);
+        if (assertionPassed) {
+            this.addAssertionToGroup(group, assertion);
+            if (context) {
+                resolve(context);
+            }
+        } else {
+            component.set("v.failure", assertion);
+            if (context) {
+                reject(Error(context.description + " : " + assertion.get("v.description")));
+            }
+        }
     },
     addAssertionToGroup: function (group, assertion) {
         var assertions = group.get("v.assertions") || [];
