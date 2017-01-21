@@ -1,4 +1,4 @@
-<aura:component description="Inherited features for all Greased tests."
+<aura:component extensible="true" description="Inherited features for all Greased tests."
                 controller="greased_TestLoader">
 
     <ltng:require scripts="{!$Resource.greased_diff}" afterScriptsLoaded="{!c.jsReady}"/>
