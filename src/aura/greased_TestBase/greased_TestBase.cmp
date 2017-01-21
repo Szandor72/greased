@@ -1,7 +1,7 @@
 <aura:component extensible="true" description="Inherited features for all Greased tests."
                 controller="greased_TestLoader">
 
-    <ltng:require scripts="{!$Resource.greased_diff}" afterScriptsLoaded="{!c.jsReady}"/>
+    <ltng:require scripts="{!'https://sz-greased-dev-ed.lightning.force.com'+$Resource.greased_diff}" afterScriptsLoaded="{!c.jsReady}" />
 
     <aura:attribute name="driver" type="Object" access="public"
                     description="The driver object used by tests"/>
