@@ -1,25 +1,51 @@
 <aura:component >
     <!--TODO remove! init only for debugger purpose -->
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="init"
+        value="{!this}"
+        action="{!c.doInit}" />
     <!--greased supports only public attributes -->
-    <aura:attribute access="public" name="characterCount" type="Integer" default="0"
-                    description="Counts characters in the searchbar"/>
-    <aura:attribute access="public" name="searchText" type="String" default=""
-                    description="The text to search for"/>
-    <aura:attribute access="public" name="minimumCharacterLength" type="Integer"
-                     description="Number of characters necessary to perform a search"/>
-    <lightning:input name="searchfield"
-                     label="Search"
-                     type="text" 
-                     placeholder="Enter search..."
-                     aura:id="searchInput"
-                     value="{!v.searchText}"
-                     required="true"
-                     onblur="{!c.onSearchInputChange}"
-                     onchange="{!c.onSearchInputChange}"/>
-    <aura:if isTrue="{!and(v.characterCount gt 0,v.characterCount lt v.minimumCharacterLength)}">
+    <aura:attribute access="public"
+        name="characterCount"
+        type="Integer"
+        default="0"
+        description="Counts characters in the searchbar" />
+    <aura:attribute access="public"
+        name="searchText"
+        type="String"
+        default=""
+        description="The text to search for" />
+    <aura:attribute access="public"
+                    name="searchDisabled"
+                    type="Boolean"
+                    description="dis/enables search Button"/>
+    <aura:attribute access="public"
+        name="minimumCharacterLength"
+        type="Integer"
+        description="Number of characters necessary to perform a search" />
+    <aura:handler name="change" value="{!v.searchText}" action="{!c.onSearchTextChange}"/>
+
+    <!--ui:inputText aura:id="searchInput"
+        value="{!v.searchText}"
+        label="Search"
+        placeholder="Enter search term..." /-->
+    <div class="slds-grid">
+        <div class="slds-p-horizontal--small slds-size--5-of-6 slds-medium-size--5-of-6 slds-large-size--5-of-6">
+            <lightning:input name="searchfield"
+                    label="Search"
+                    type="text"
+                    placeholder="Enter search..."
+                    aura:id="searchInput"
+                    value="{!v.searchText}"
+                    required="true" />
+        <aura:if isTrue="{!and(v.characterCount gt 0,v.characterCount lt v.minimumCharacterLength)}">
         <lightning:badge label="Please enter more text" aura:id="warningBadge"/>
-    </aura:if>
-    v.characterCount: {!v.characterCount}<br/>
-    v.searchText: {!v.searchText}
+    </aura:if>    
+        </div>
+        <div>
+        <lightning:button disabled="{!v.characterCount lt v.minimumCharacterLength}"
+                                     aura:id="searchButton" variant="brand" label="Search"/>
+        </div>    
+         
+        
+    </div>
 </aura:component>

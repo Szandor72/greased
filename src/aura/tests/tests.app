@@ -2,7 +2,7 @@
     
     <div style="padding:30px;">
         <div class="slds-text-heading--large">Original Component</div>
-        <c:searchBarInputText minimumCharacterLength="3"/>
+        <c:searchBarInputText minimumCharacterLength="5"/>
     </div>
     
     <c:searchBarInputTextTest />

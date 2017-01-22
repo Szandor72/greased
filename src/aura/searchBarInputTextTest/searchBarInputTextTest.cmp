@@ -2,5 +2,5 @@
     <aura:handler name="init"
         value="{!this}"
         action="{!c.doInit}" />
-    <c:searchBarInputText aura:id="brandNewComponent" minimumCharacterLength="3"/>
+    <c:searchBarInputText aura:id="brandNewComponent" minimumCharacterLength="5"/>
 </aura:component>
